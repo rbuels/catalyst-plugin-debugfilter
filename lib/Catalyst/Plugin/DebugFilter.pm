@@ -1,13 +1,10 @@
-use strict;
-use warnings;
 package Catalyst::Plugin::DebugFilter;
+# ABSTRACT: filter Catalyst objects for cleaner debug dumps
 
-use Moose;
+use Moose::Role;
 use Data::Dump ();
 
 use Data::Visitor::Callback;
-
-extends 'SGN::View::Email';
 
 has 'visitor_args' => (
     is => 'ro',
@@ -18,13 +15,13 @@ has 'visitor_args' => (
 has 'skip_class' => (
     is  => 'ro',
     isa => 'ArrayRef',
-    default => sub { [] },
+    default => sub { ['Catalyst'] },
    );
 
 sub dump_these_filtered {
     my ($self) = @_;
     return map {
-        $_->[1] = $self->filter_object_for_debug_dump( $_->[1] )
+        [ $_->[0], $self->filter_object_for_debug_dump( $_->[1] ) ]
     } $self->dump_these;
 }
 
@@ -44,7 +41,7 @@ sub _build__debug_filter_visitor {
         # render skip_class option as visitor args
         ( map {
             my $class = $_;
-            $class => sub { shift; '('.ref(shift)." skipped, isa $class)" }
+            $class => sub { shift; '('.ref(shift)." object skipped, isa $class)" }
          } @{ $self->skip_class }
         ),
 
@@ -58,9 +55,5 @@ sub filter_object_for_debug_dump {
     my ( $self, $object ) = @_;
     $self->_debug_filter_visitor->visit( $object );
 }
-
-
-
-
 
 1;

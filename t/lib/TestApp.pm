@@ -3,7 +3,11 @@ package TestApp;
 use Moose;
 extends 'Catalyst';
 
-__PACKAGE__->config( default_view => 'Mason' );
+use Catalyst qw/
+  DebugFilter
+/;
+
+#__PACKAGE__->config(
 __PACKAGE__->setup;
 
 1;
