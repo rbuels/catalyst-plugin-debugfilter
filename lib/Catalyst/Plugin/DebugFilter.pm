@@ -135,7 +135,7 @@ be replaced with your own L<Data::Visitor> subclass if desired.
 =cut
 
 has 'debug_filter_visitor' => (
-    is => 'ro',
+    is => 'rw',
     isa => 'Data::Visitor',
     lazy_build => 1,
    );
