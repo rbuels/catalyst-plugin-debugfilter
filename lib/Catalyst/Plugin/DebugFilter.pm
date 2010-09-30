@@ -37,13 +37,13 @@ use Data::Visitor::Callback;
 =head1 DESCRIPTION
 
 Provides a couple of methods useful for printing readable debuggin
-output.  Processes debugging objects with L<Data::Visitor>, and
+output.  Processes debugging objects with L<Data::Visitor::Callback>, and
 exposes its flexibility with config options.
 
-=method dump_these_strings()
+=method dump_these_strings( )
 
 Get a list like
-C<['Request', '<string dump>'], ['Stash', '<string dump>'], ...>
+C<['Request', 'string dump'], ['Stash', 'string dump'], ...>
 for use in debugging output.  Most users will need only this method.
 
 =cut
@@ -55,9 +55,9 @@ sub dump_these_strings {
         $self->dump_these_filtered;
 }
 
-=method dump_these_filtered()
+=method dump_these_filtered( )
 
-Filtered version of the L<Catalyst> C<$c-&gt;dump_these> method.
+Filtered version of the L<Catalyst> C<dump_these> method.
 Returns the same C<[ 'Request', $req ], ['Stash', $stash], ...>
 list, except the objects in the arrayrefs are run through this
 filter to make them amenable to debug dumping.
@@ -87,7 +87,7 @@ sub filter_object_for_dump {
 =attr skip_class
 
 One or more class names to filter out of objects to be dumped.  If an
-object is-a one of these class names, the dump filtering will replace
+object is-a one of these classes, the dump filtering will replace
 the object with a string "skipped" message.
 
 Can be either an arrayref or a whitespace-separated list of class names.
@@ -129,7 +129,8 @@ has 'visitor_args' => (
 
 =attr debug_filter_visitor
 
-The L<Data::Visitor::Callback> object being used for filtering.
+The L<Data::Visitor::Callback> object being used for filtering.  Can
+be replaced with your own L<Data::Visitor> subclass if desired.
 
 =cut
 
